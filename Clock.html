@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="manifest" href="Manifest.json">
+  <!-- <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <!-- <script src="https://hammerjs.github.io/dist/hammer.js"></script> -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.1.0/jquery.simpleWeather.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
+  <style type="text/css">
+    @font-face {
+      font-family: Pixel;
+      src: url(Pixel.ttf);
+    }
+
+    div {
+      font-family: Pixel;
+    }
+
+    .FullPage {
+      position:fixed;top:0px;left:0px;width:100%;height:100%;background-color:black;
+      cursor:default;
+
+    }
+
+    .ClockPage {
+      /*position:fixed;top:0px;left:0px;width:100%;height:100%;background-color:#333;
+      cursor:default;*/
+
+    }
+
+    .FullClockContainer {
+      background-color:black;
+      font-size:170px;
+      color:#fff;
+      display: block;
+      margin: auto;
+      text-align: center;
+      padding: 175px 0;
+    }
+
+    .WeatherPage {
+      /*position:fixed;top:0px;left:0px;width:100%;height:100%;background-color:#333;
+      cursor:default;*/
+    }
+
+    .WeatherContainer {
+      background-color:black;
+      font-size:170px;
+      color:#fff;
+      display: block;
+      margin: auto;
+      text-align: center;
+      overflow: hidden;
+      padding: 175px 0;
+    }
+
+    .StockContainer {
+      background-color:black;
+      font-size:170px;
+      color:#fff;
+      display: block;
+      margin: auto;
+      text-align: center;
+      overflow: hidden;
+      padding: 175px 0;
+      padding-top: 350px;
+    }
+
+    .IconContainer {
+      text-align:left;
+      float:left;
+      padding: 175px 0;
+    }
+
+    .StockIconContainer {
+      text-align:left;
+      float:left;
+      padding: 175px 0;
+      padding-top: 350px;
+    }
+
+    .Icons {
+      height:200px;
+      width: 200px;
+      text-align:left;
+      float:left;
+      padding-left: 30px;
+    }
+
+
+  </style>
+
+  <title>Digital Clock</title>
+
+  <script type='text/javascript'>
+  window.onload=function(){
+    function showTime() {
+      var a_p = "";
+      var today = new Date();
+      var curr_hour = today.getHours();
+      var curr_minute = today.getMinutes();
+      var curr_second = today.getSeconds();
+      if (curr_hour < 12) {
+          a_p = "<span>AM</span>";
+      } else {
+          a_p = "<span>PM</span>";
+      }
+      if (curr_hour == 0) {
+          curr_hour = 12;
+      }
+      if (curr_hour > 12) {
+          curr_hour = curr_hour - 12;
+      }
+      curr_hour = checkTime(curr_hour);
+      curr_minute = checkTime(curr_minute);
+      curr_second = checkTime(curr_second);
+      document.getElementById('ClockPage').innerHTML=curr_hour + " : " + curr_minute + " : " + curr_second;
+    }
+
+    function checkTime(i) {
+      if (i < 10) {
+          i = "0" + i;
+      }
+      return i;
+    }
+    setInterval(showTime, 500);
+
+  }
+
+
+
+  </script>
+</head>
+
+<body>
+  <div class="FullPage" id="FullPage">
+    <!-- Clock Page -->
+    <div class="ClockPage">
+      <div class="FullClockContainer" id="ClockPage"></div>
+    </div>
+    <!-- End Clock Page -->
+    <!-- Weather Page -->
+    <div class="WeatherPage" id="WeatherPage">
+      <div class="IconContainer" id="WeatherIcon"></div>
+      <div class="WeatherContainer" id="weather"></div>
+    </div>
+    <!-- End Weather Page -->
+    <!-- Stock pages -->
+    <div class="StockPage" id="StockPage">
+      <div class="StockName" id="StockPageName">
+        <div class="StockIconContainer" id="StockIcon"></div>
+        <div class="StockContainer" id="StockName"></div>
+      </div>
+      <div class="StockPercent" id="StockPagePercent">
+        <div class="StockIconContainer" id="StockArrow"></div>
+        <div class="StockContainer" id="StockPercent"></div>
+      </div>
+      <div class="StockPrice" id="StockPagePrice">
+        <div class="StockIconContainer" id="StockMoney"></div>
+        <div class="StockContainer" id="StockPrice"></div>
+      </div>
+    </div>
+    <!-- End Stock Pages -->
+    <!-- GitHub Page -->
+    <!-- <div class="ServerNotification" id="ServerNotification">
+      <div class="IconContainer" id="ServerIcon"></div>
+      <div class="NotificationContainer" id="Notification"></div>
+    </div> -->
+    <!-- End GitHub Page -->
+  </div>
+
+    <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "dAzU3"
+      }], "*")
+    }
+
+    // Docs at http://simpleweatherjs.com
+    $(document).ready(function() {
+      getWeather(); //Get the initial weather.
+      setInterval(getWeather, 600000); //Update the weather every 10 minutes.
+    });
+    function getWeather() {
+      $.simpleWeather({
+        location: 'Spring Hill, FL',
+        woeid: '',
+        unit: 'f',
+        success: function(weather) {
+          // html = '<h2><i class="icon-'+weather.code+'"></i> '+weather.temp+'&deg;'+weather.units.temp+'</h2>';
+          console.log(weather.code);
+          WeatherIcon = '<img class ="Icons" src="WeatherIcons/'+weather.code+'.png">';
+          html = '<span>'+weather.temp+'&deg;'+weather.units.temp+'</span>';
+
+          $("#WeatherIcon").html(WeatherIcon);
+          $("#weather").html(html);
+        },
+        error: function(error) {
+          $("#weather").html('<p>'+error+'</p>');
+        }
+      });
+    }
+
+
+    // $(document).ready(function() {
+    //   $.ajax({
+    //        url: "https://crossorigin.me/https://github.com/users/Ianidane/contributions?full_graph=1",
+    //        dataType: 'text',
+    //        beforeSend: function(xhr){xhr.setRequestHeader('X-Test-Header', 'test-value');},
+    //        success: function(data) {
+    //          console.log("success "+data);
+    //             var elements = $("<div>").html(data)[0].getElementsByTagName("h2")[0];
+    //             for(var i = 0; i < elements.length; i++) {
+    //                  var theText = elements[i].firstChild.nodeValue;
+    //                  // Do something here
+    //                  console.log(theText);
+    //             }
+    //        }
+    //   });
+    // });
+
+    $(document).ready(updateStockPrice);
+      function updateStockPrice(){
+       	$.getJSON('https://finance.google.com/finance/info?client=ig&q=NSE:NVDA&callback=?',function(response){
+      	    var stockInfo = response[0];
+            var stockName ='<span>'+stockInfo.t+'</span>';
+            var StockPercent ='<span>'+stockInfo.c+'</span>';
+      	    var stockPrice ='<span>'+stockInfo.l+'</span>';
+
+
+            var StockIcon = '<img class ="Icons" src="Icons/Stock.png">';
+            if (stockInfo.c > 0){
+              var StockArrow = '<img class ="Icons" src="Icons/StockUpArrow.png">';
+            } else {
+              var StockArrow = '<img class ="Icons" src="Icons/StockDownArrow.png">';
+            }
+            var StockMoney = '<img class ="Icons" src="Icons/Money.png">';
+
+
+      	    $('#StockName').html(stockName);
+            $('#StockIcon').html(StockIcon);
+
+            $('#StockPercent').html(StockPercent);
+            $('#StockArrow').html(StockArrow);
+
+            $('#StockPrice').html(stockPrice);
+            $('#StockMoney').html(StockMoney);
+      	  });
+       	setTimeout("updateStockPrice()", 20000);
+      }
+
+      // $('.add-remove').slick({
+      //   slidesToShow: 3,
+      //   slidesToScroll: 3
+      // });
+      // $.ajax({url: "https://cyberirb.us/newprodev/",
+      //   type: "HEAD",
+      //   timeout:1000,
+      //   statusCode: {
+      //       200: function (response) {
+      //         $('.FullPage').slick('slickRemove');
+      //       },
+      //       400: function (response) {
+      //         $('.FullPage').slick('slickAdd','<div class="ServerNotification" id="ServerNotification"><div class="IconContainer" id="ServerIcon"><img class ="Icons" src="Icons/ServerDown.png"></div><div class="NotificationContainer" id="Notification"><span>CyberIRB Down!</span></div></div>');
+      //       },
+      //       0: function (response) {
+      //         $('.FullPage').slick('slickAdd','<div class="ServerNotification" id="ServerNotification"><div class="IconContainer" id="ServerIcon"><img class ="Icons" src="Icons/ServerDown.png"></div><div class="NotificationContainer" id="Notification"><span>CyberIRB Down!</span></div></div>',2);
+      //       }
+      //   }
+      // });
+
+
+    $(document).ready(function(){
+      //$('.FullPage').slick();
+      $('.FullPage').slick({
+        // slidesToShow: 2,
+        // slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 4000,
+        vertical: false,
+        verticalSwiping: false,
+        prevArrow: false,
+        nextArrow: false
+        //infinite: false,
+      });
+      $('.StockPage').slick({
+        // slidesToShow: 2,
+        // slidesToScroll: 1,
+        autoplay: false,
+        autoplaySpeed: 2000,
+        vertical: true,
+        verticalSwiping: true,
+        prevArrow: false,
+        nextArrow: false
+      });
+    });
+
+    $('.FullPage').on('beforeChange', function(event, slick, currentSlide, nextSlide){
+      console.log("FullPage "+currentSlide);
+      //$('.StockPage').slick('slickPause');
+      //$('.StockPage').slick('slickGoTo',0);
+      if (nextSlide == 2){
+        console.log("FullPage pause and stock page play");
+        //$('.FullPage').slick('slickSetOption', 'vertical', true);
+        $('.FullPage').slick('slickPause');
+        $('.StockPage').slick('slickPlay');
+
+        //$('.StockPage').slick('slickSetOption', 'autoplay', true);
+      }
+    });
+    $('.StockPage').on('beforeChange', function(event, slick, currentSlide, nextSlide){
+      $('.FullPage').slick('slickPause');
+      console.log("StockPage "+currentSlide);
+      if (currentSlide == 2){
+        console.log("stock page pause and fullpage play");
+        $('.StockPage').slick('slickPause');
+        $('.FullPage').slick('slickPlay');
+        $('.StockPage').slick('slickGoTo',0);
+
+      }
+    });
+    // $('.StockPage').on('afterChange', function(event, slick, currentSlide){
+    //   console.log("StockPage "+currentSlide);
+    //   if (currentSlide == 2){
+    //     console.log("after stock page 2");
+    //     $('.StockPage').slick('slickGoTo',0);
+    //   }
+    // });
+  </script>
+
+</body>
+
+</html>
