@@ -3,10 +3,8 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="manifest" href="Manifest.json">
-  <!-- <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-  <!-- <script src="https://hammerjs.github.io/dist/hammer.js"></script> -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.1.0/jquery.simpleWeather.min.js"></script>
 
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
@@ -256,43 +254,17 @@
        	setTimeout("updateStockPrice()", 20000);
       }
 
-      // $('.add-remove').slick({
-      //   slidesToShow: 3,
-      //   slidesToScroll: 3
-      // });
-      // $.ajax({url: "https://cyberirb.us/newprodev/",
-      //   type: "HEAD",
-      //   timeout:1000,
-      //   statusCode: {
-      //       200: function (response) {
-      //         $('.FullPage').slick('slickRemove');
-      //       },
-      //       400: function (response) {
-      //         $('.FullPage').slick('slickAdd','<div class="ServerNotification" id="ServerNotification"><div class="IconContainer" id="ServerIcon"><img class ="Icons" src="Icons/ServerDown.png"></div><div class="NotificationContainer" id="Notification"><span>CyberIRB Down!</span></div></div>');
-      //       },
-      //       0: function (response) {
-      //         $('.FullPage').slick('slickAdd','<div class="ServerNotification" id="ServerNotification"><div class="IconContainer" id="ServerIcon"><img class ="Icons" src="Icons/ServerDown.png"></div><div class="NotificationContainer" id="Notification"><span>CyberIRB Down!</span></div></div>',2);
-      //       }
-      //   }
-      // });
-
 
     $(document).ready(function(){
-      //$('.FullPage').slick();
       $('.FullPage').slick({
-        // slidesToShow: 2,
-        // slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 4000,
         vertical: false,
         verticalSwiping: false,
         prevArrow: false,
         nextArrow: false
-        //infinite: false,
       });
       $('.StockPage').slick({
-        // slidesToShow: 2,
-        // slidesToScroll: 1,
         autoplay: false,
         autoplaySpeed: 2000,
         vertical: true,
@@ -304,15 +276,10 @@
 
     $('.FullPage').on('beforeChange', function(event, slick, currentSlide, nextSlide){
       console.log("FullPage "+currentSlide);
-      //$('.StockPage').slick('slickPause');
-      //$('.StockPage').slick('slickGoTo',0);
       if (nextSlide == 2){
         console.log("FullPage pause and stock page play");
-        //$('.FullPage').slick('slickSetOption', 'vertical', true);
         $('.FullPage').slick('slickPause');
         $('.StockPage').slick('slickPlay');
-
-        //$('.StockPage').slick('slickSetOption', 'autoplay', true);
       }
     });
     $('.StockPage').on('beforeChange', function(event, slick, currentSlide, nextSlide){
@@ -326,13 +293,6 @@
 
       }
     });
-    // $('.StockPage').on('afterChange', function(event, slick, currentSlide){
-    //   console.log("StockPage "+currentSlide);
-    //   if (currentSlide == 2){
-    //     console.log("after stock page 2");
-    //     $('.StockPage').slick('slickGoTo',0);
-    //   }
-    // });
   </script>
 
 </body>
