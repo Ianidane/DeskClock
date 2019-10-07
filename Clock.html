@@ -173,126 +173,113 @@
   </div>
 
     <script>
-    // tell the embed parent frame the height of the content
-    if (window.parent && window.parent.parent){
-      window.parent.parent.postMessage(["resultsFrame", {
+// tell the embed parent frame the height of the content
+if (window.parent && window.parent.parent) {
+    window.parent.parent.postMessage(["resultsFrame", {
         height: document.body.getBoundingClientRect().height,
         slug: "dAzU3"
-      }], "*")
-    }
+    }], "*")
+}
+// Docs at http://simpleweatherjs.com
+$(document).ready(function() {
+    getWeather(); //Get the initial weather.
+    setInterval(getWeather, 600000); //Update the weather every 10 minutes.
+});
 
-    // Docs at http://simpleweatherjs.com
-    $(document).ready(function() {
-      getWeather(); //Get the initial weather.
-      setInterval(getWeather, 600000); //Update the weather every 10 minutes.
-    });
-    function getWeather() {
-      $.simpleWeather({
+function getWeather() {
+    $.simpleWeather({
         location: 'Spring Hill, FL',
         woeid: '',
         unit: 'f',
         success: function(weather) {
-          // html = '<h2><i class="icon-'+weather.code+'"></i> '+weather.temp+'&deg;'+weather.units.temp+'</h2>';
-          console.log(weather.code);
-          WeatherIcon = '<img class ="Icons" src="WeatherIcons/'+weather.code+'.png">';
-          html = '<span>'+weather.temp+'&deg;'+weather.units.temp+'</span>';
-
-          $("#WeatherIcon").html(WeatherIcon);
-          $("#weather").html(html);
+            // html = '<h2><i class="icon-'+weather.code+'"></i> '+weather.temp+'&deg;'+weather.units.temp+'</h2>';
+            console.log(weather.code);
+            WeatherIcon = '<img class ="Icons" src="WeatherIcons/' + weather.code + '.png">';
+            html = '<span>' + weather.temp + '&deg;' + weather.units.temp + '</span>';
+            $("#WeatherIcon").html(WeatherIcon);
+            $("#weather").html(html);
         },
         error: function(error) {
-          $("#weather").html('<p>'+error+'</p>');
+            $("#weather").html('<p>' + error + '</p>');
         }
-      });
-    }
+    });
+}
+// $(document).ready(function() {
+//   $.ajax({
+//        url: "https://crossorigin.me/https://github.com/users/Ianidane/contributions?full_graph=1",
+//        dataType: 'text',
+//        beforeSend: function(xhr){xhr.setRequestHeader('X-Test-Header', 'test-value');},
+//        success: function(data) {
+//          console.log("success "+data);
+//             var elements = $("<div>").html(data)[0].getElementsByTagName("h2")[0];
+//             for(var i = 0; i < elements.length; i++) {
+//                  var theText = elements[i].firstChild.nodeValue;
+//                  // Do something here
+//                  console.log(theText);
+//             }
+//        }
+//   });
+// });
+$(document).ready(updateStockPrice);
 
-
-    // $(document).ready(function() {
-    //   $.ajax({
-    //        url: "https://crossorigin.me/https://github.com/users/Ianidane/contributions?full_graph=1",
-    //        dataType: 'text',
-    //        beforeSend: function(xhr){xhr.setRequestHeader('X-Test-Header', 'test-value');},
-    //        success: function(data) {
-    //          console.log("success "+data);
-    //             var elements = $("<div>").html(data)[0].getElementsByTagName("h2")[0];
-    //             for(var i = 0; i < elements.length; i++) {
-    //                  var theText = elements[i].firstChild.nodeValue;
-    //                  // Do something here
-    //                  console.log(theText);
-    //             }
-    //        }
-    //   });
-    // });
-
-    $(document).ready(updateStockPrice);
-      function updateStockPrice(){
-       	$.getJSON('https://finance.google.com/finance/info?client=ig&q=NSE:NVDA&callback=?',function(response){
-      	    var stockInfo = response[0];
-            var stockName ='<span>'+stockInfo.t+'</span>';
-            var StockPercent ='<span>'+stockInfo.c+'</span>';
-      	    var stockPrice ='<span>'+stockInfo.l+'</span>';
-
-
-            var StockIcon = '<img class ="Icons" src="Icons/Stock.png">';
-            if (stockInfo.c > 0){
-              var StockArrow = '<img class ="Icons" src="Icons/StockUpArrow.png">';
-            } else {
-              var StockArrow = '<img class ="Icons" src="Icons/StockDownArrow.png">';
-            }
-            var StockMoney = '<img class ="Icons" src="Icons/Money.png">';
-
-
-      	    $('#StockName').html(stockName);
-            $('#StockIcon').html(StockIcon);
-
-            $('#StockPercent').html(StockPercent);
-            $('#StockArrow').html(StockArrow);
-
-            $('#StockPrice').html(stockPrice);
-            $('#StockMoney').html(StockMoney);
-      	  });
-       	setTimeout("updateStockPrice()", 20000);
-      }
-
-
-    $(document).ready(function(){
-      $('.FullPage').slick({
+function updateStockPrice() {
+    $.getJSON('https://finance.google.com/finance/info?client=ig&q=NSE:NVDA&callback=?', function(response) {
+        var stockInfo = response[0];
+        var stockName = '<span>' + stockInfo.t + '</span>';
+        var StockPercent = '<span>' + stockInfo.c + '</span>';
+        var stockPrice = '<span>' + stockInfo.l + '</span>';
+        var StockIcon = '<img class ="Icons" src="Icons/Stock.png">';
+        if (stockInfo.c > 0) {
+            var StockArrow = '<img class ="Icons" src="Icons/StockUpArrow.png">';
+        } else {
+            var StockArrow = '<img class ="Icons" src="Icons/StockDownArrow.png">';
+        }
+        var StockMoney = '<img class ="Icons" src="Icons/Money.png">';
+        $('#StockName').html(stockName);
+        $('#StockIcon').html(StockIcon);
+        $('#StockPercent').html(StockPercent);
+        $('#StockArrow').html(StockArrow);
+        $('#StockPrice').html(stockPrice);
+        $('#StockMoney').html(StockMoney);
+    });
+    setTimeout("updateStockPrice()", 20000);
+}
+$(document).ready(function() {
+    $('.FullPage').slick({
         autoplay: true,
         autoplaySpeed: 4000,
         vertical: false,
         verticalSwiping: false,
         prevArrow: false,
         nextArrow: false
-      });
-      $('.StockPage').slick({
+    });
+    $('.StockPage').slick({
         autoplay: false,
         autoplaySpeed: 2000,
         vertical: true,
         verticalSwiping: true,
         prevArrow: false,
         nextArrow: false
-      });
     });
-
-    $('.FullPage').on('beforeChange', function(event, slick, currentSlide, nextSlide){
-      console.log("FullPage "+currentSlide);
-      if (nextSlide == 2){
+});
+$('.FullPage').on('beforeChange', function(event, slick, currentSlide, nextSlide) {
+    console.log("FullPage " + currentSlide);
+    if (nextSlide == 2) {
         console.log("FullPage pause and stock page play");
         $('.FullPage').slick('slickPause');
         $('.StockPage').slick('slickPlay');
-      }
-    });
-    $('.StockPage').on('beforeChange', function(event, slick, currentSlide, nextSlide){
-      $('.FullPage').slick('slickPause');
-      console.log("StockPage "+currentSlide);
-      if (currentSlide == 2){
+    }
+});
+$('.StockPage').on('beforeChange', function(event, slick, currentSlide, nextSlide) {
+    $('.FullPage').slick('slickPause');
+    console.log("StockPage " + currentSlide);
+    if (currentSlide == 2) {
         console.log("stock page pause and fullpage play");
         $('.StockPage').slick('slickPause');
         $('.FullPage').slick('slickPlay');
-        $('.StockPage').slick('slickGoTo',0);
-
-      }
-    });
+        $('.StockPage').slick('slickGoTo', 0);
+    }
+});
   </script>
 
 </body>
